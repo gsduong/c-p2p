@@ -2,9 +2,6 @@
  * \file	game.c
  * \brief	Contains functions for the game mechanism itself.
  *
- * \author	Richard Degenne
- * \date	12-06-14
- *
  */
 
 # include "game.h"
@@ -14,8 +11,9 @@ grid opponent;//!< Opponent grid for the host
 
 
 void setup_fleet (boat fleet_p[]) {
-	char* names[FLEET_SIZE] = {"Aircraft carrier", "Battleship", "Submarine", "Submarine", "Patrol boat", "Patrol boat"};
-	int lenghts[FLEET_SIZE] = {5,4,3,3,2,2};
+	char* names[FLEET_SIZE] = {"Aircraft carrier", "Battleship"}; /*, "Submarine", "Submarine", "Patrol boat", "Patrol "
+			"boat"}; */
+	int lenghts[FLEET_SIZE] = {3,2}; /*,3,3,2,2};*/
 	int i;
 
 	for(i=0 ; i<FLEET_SIZE ; ++i) { // For each boat

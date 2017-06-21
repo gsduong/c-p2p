@@ -2,9 +2,6 @@
  * \file	overall_net.c
  * \brief	Overall network implementation.
  *
- * \author	Richard Degenne
- * \date	12-15-14
- *
  */
 
 # include "overall_net.h"

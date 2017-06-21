@@ -2,9 +2,6 @@
  * \file	network.c
  * \brief	Header for the network.c file.
  *
- * \author	Richard Degenne
- * \date	12-09-14
- *
  */
 
 # include "network.h"

@@ -2,9 +2,6 @@
  * \file	game.h
  * \brief	Header for the game.c file.
  *
- * \author	Richard Degenne
- * \date	12-06-14
- *
  */
 
 # ifndef _GAME_H
@@ -24,7 +21,7 @@
 /**
  * \brief Number of boats in the float
  */
-# define FLEET_SIZE 6
+# define FLEET_SIZE 2
 
 /**
  * \brief	The grid's x-size (A..J)

@@ -1,10 +1,6 @@
 /**
  * \file	serv.h
  * \brief	Header for the serv.c file.
- *
- * \author	Adrien Deprez
- * \date	12-09-14
- *
  */
 
 

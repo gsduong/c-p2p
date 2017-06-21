@@ -2,9 +2,6 @@
  * \file	overall_net.h
  * \brief	Header for the overall_net.c file.
  *
- * \author	Richard Degenne
- * \date	12-15-14
- *
  */
 
 # ifndef _OVERALL_NET_H
@@ -102,7 +99,7 @@ typedef struct game {
 typedef struct opponent {
 	int sfd;//!< The opponent's dialog socket file descriptor
 	struct sockaddr_in addr;//!< The opponent's dialog socket IP address
-	int addr_len;//!< The opponent's dialog socket address lenght
+	int addr_len;//!< The opponent's dialog socket address length
 	char name[MAX_NAME];//!< The opponent's name.
 } opponent_t;
 

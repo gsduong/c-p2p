@@ -2,11 +2,9 @@
  * \file	server/main.c
  * \brief	Contains functions for the host server.
  *
- * \author	Adrien Deprez
- * \date	12-09-14
- *
  */
-
+#define NUM_CONN 5
+#define PORT 5000
 #include "serv.h"
 
 /*
@@ -24,28 +22,29 @@ int main(int argc, char* argv[])
 	// Variable declaration
 	int serv_sock; 
 	struct sockaddr_in serv_addr;
-	int i=0;
+	int i = 0;
 	int port = 5000;
 	pthread_t thread;
 
 	// Construction of the Adress
-	CHECK(serv_sock = socket(AF_INET, SOCK_STREAM,0), "Error : socket");
+	// TCP Protocol
+	CHECK(serv_sock = socket(AF_INET, SOCK_STREAM,0), "Error : socket"); /* if = -1 , perror msg*/
 	// inet_aton("127.0.0.1", &(serv_addr.sin_addr));
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
 	serv_addr.sin_family = AF_INET;
-	serv_addr.sin_port = htons(port);
-	memset(&serv_addr.sin_zero,0,8);
+	serv_addr.sin_port = htons(PORT);
+	memset(&serv_addr.sin_zero, 0, 8);
 	
-	// Bind listening socket with Threadhis adress
+	// Bind listening socket with this address
 	CHECK( (bind(serv_sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr))), "Error : bind" );
 	
 	// Listening
-	CHECK(listen(serv_sock, 5), "Error : listen");
+	CHECK(listen(serv_sock, NUM_CONN), "Error : listen");
 
 	while(1)
 	{
 		// Waiting for receiving
-		player_tab[i].addr_len = sizeof(player_tab[i].addr_d); //!\\ Initialisation of each player
+		player_tab[i].addr_len = sizeof(player_tab[i].addr_d); //!\\ Initialization of each player
 		CHECK(player_tab[i].sfd = accept(serv_sock,(struct sockaddr *)&(player_tab[i].addr_d), &(player_tab[i].addr_len)),"Error : accept");
 		// Thread creation
 		pthread_create(&thread, NULL, routine_thread, (void*)&(player_tab[i]));
@@ -57,13 +56,13 @@ void* routine_thread(void* arg)
 {
 	// Variable declaration
 	struct player* arg_pl = (struct player*)arg;
-	arg_pl->status = 0;
+
 	char buff[MAXBUFF];
 	int sts;
 	char cmd[50];
 	char addr[50];
 	int port;
-	int mode;
+	int mode; // 0. Host 1. Join
 	char name[50];
 	int i = 0;
 	arg_pl->status = AVAILABLE;
@@ -72,7 +71,8 @@ void* routine_thread(void* arg)
 		// Receiving a request
 		CHECK(sts = recv(arg_pl->sfd, buff, MAXBUFF, 0), "Error : read");
 		sscanf(buff,"%s",cmd);
-		printf("Reçu : %s \n",buff);
+		printf("%s\n", cmd);
+		printf("Received : %s \n",buff);
 		// Compare the request and execute it
 		if (!strcmp("HOST",cmd))
 		{
@@ -82,11 +82,12 @@ void* routine_thread(void* arg)
 			arg_pl->addr_l.sin_port = htons(port);
 			arg_pl->mode = mode;
 			//** TEST **//
-			printf("Name : %s \t Address : %s \t Port : %d \t Hote/Joueur : %d \n",arg_pl->name,inet_ntoa(arg_pl->addr_l.sin_addr),ntohs(arg_pl->addr_l.sin_port),arg_pl->mode);
+			printf("Name : %s \t Address : %s \t Port : %d \t Host/Player : %d \n",arg_pl->name,inet_ntoa(arg_pl->addr_l
+																											   .sin_addr),ntohs(arg_pl->addr_l.sin_port),arg_pl->mode);
 			//** FIN TEST **//
 			
 		}
-		else if (!strcmp("GAMES",cmd))
+		else if (!strcmp("GAMES",cmd)) // Scan for games
 		{
 			// Informations about the other players
 			for (i=0;i<MAXPLAYER;i++)
@@ -96,7 +97,7 @@ void* routine_thread(void* arg)
 					strcpy(addr,inet_ntoa(player_tab[i].addr_l.sin_addr));
 					sprintf(buff,"GAME %s %s %d %d",player_tab[i].name,addr,ntohs(player_tab[i].addr_l.sin_port),player_tab[i].status);
 					CHECK(send(arg_pl->sfd,buff,strlen(buff)+1,0),"Error : write");
-					CHECK(sts = recv(arg_pl->sfd, buff, MAXBUFF, 0), "Error : read"); //!\\ Synchronisme 
+					CHECK(sts = recv(arg_pl->sfd, buff, MAXBUFF, 0), "Error : read"); //!\\ Synchronize
 					
 				}
 			}

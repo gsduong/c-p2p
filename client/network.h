@@ -33,7 +33,7 @@
 # define PLACE_REQ 1
 
 /**
- * \brief	Code for a `PLACE` request.
+ * \brief	Code for a `FIRE` request.
  */
 # define FIRE_REQ 2
 

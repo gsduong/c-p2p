@@ -2,9 +2,6 @@
  * \file	client/main.c
  * \brief	Main program
  *
- * \author	Richard Degenne
- * \date	12-06-14
- *
  */
 
 # include "game.h"
@@ -25,7 +22,7 @@ int main(int argc, char* argv[]) {
 	opponent_t connected;
 	int games_count;
 	char name[MAX_NAME];
-	char addr_str[16];
+	char addr_str[16]; // IP address of server - forced to be 127.0.0.1
 	int mode = argc - 1, win = 0;
 	grid primary, tracking;
 	coord fire;
@@ -61,6 +58,7 @@ int main(int argc, char* argv[]) {
 		printf("%d games received.\n", games_count);
 		print_games(games, games_count);
 
+        printf("Test\n");
 		int selected;
 		do {
 			printf("Select a game: ");
@@ -162,6 +160,5 @@ int main(int argc, char* argv[]) {
 			printf("End of your turn.\n");
 		}
 	}
-	printf("Thanks for playing Battleships! Check http://richarddegenne.wordpress.com for more about this game!\n");
 	return EXIT_SUCCESS;
 }
